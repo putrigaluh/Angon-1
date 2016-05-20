@@ -1,0 +1,13 @@
+select detail_transaksi.id_transaksi, detail_transaksi.id_produk
+        from detail_transaksi 
+        inner join transaksi USING(id_transaksi)
+        inner join produk using(id_produk)
+WHERE id_user = 1
+
+SELECT DISTINCT id_transaksi, tgl_transaksi, alamat_pengiriman, status FROM ( 
+    select detail_transaksi.id_transaksi, detail_transaksi.id_produk 
+    from detail_transaksi 
+    inner join transaksi USING(id_transaksi) 
+    inner join produk using(id_produk)
+
+      WHERE produk.id_user = 1) as a
