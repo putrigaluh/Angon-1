@@ -13,18 +13,21 @@
 			<div class="row">
 
 				<div class="span12">
-					<form action="<?php echo base_url().'ecomerce/shoppingcart/update'; ?>" method="post" >
+					<form method="post" autocomplete="off">
 
 					<?php $i = 1; ?>
 					<?php
 					$cart_contents = array();
+					if($this->cart->contents() != null){
+						foreach ($this->cart->contents() as $items) {
+							$cart_contents[$items['id_user']]['id_penjual'] 			= $items['id_user'];
+							$cart_contents[$items['id_user']]['nama_toko'] 				= $items['nama_toko'];
+							$cart_contents[$items['id_user']]['kota'] 					= $items['kota'];
 
-					foreach ($this->cart->contents() as $items) {
-						$cart_contents[$items['id_user']]['id_penjual'] 			= $items['id_user'];
-						$cart_contents[$items['id_user']]['nama_toko'] 				= $items['nama_toko'];
-						$cart_contents[$items['id_user']]['kota'] 					= $items['kota'];
-
-						$cart_contents[$items['id_user']]['item_per_penjual'][$items['id']] 	= $items;
+							$cart_contents[$items['id_user']]['item_per_penjual'][$items['id']] 	= $items;
+						}
+					}else{
+						echo "<div align='center'>Anda belum menambah produk ke keranjang belanja</div>";
 					}
 					?>
 					<?php foreach ($cart_contents as $cart): ?>
@@ -48,46 +51,41 @@
 							<tbody>
 								<?php $total_berat[$cart['id_penjual']] = 0; ?>
 								<?php foreach ($cart['item_per_penjual'] as $item):?>
-									<?php echo form_hidden($i.'[rowid]', $item['name']); ?>
 									<tr>
 										<td>
-										<li class="span2 clearfix">
+										<li class="span2">
 											<a href="#"><img src="<?php echo base_url($item['image']);?>" alt=""></a>
 										</li>
 										</td>
 										<td class="desc">
 											<h4><a href="#" class="invarseColor">
 												<?php echo $item['name']; ?>
-												</a></h4>
+												</a>
+											</h4>
 										</td>
 										<td class="quantity">
-											<h4><a href="#" class="invarseColor">
-												<?php echo "<li>".$item['stok']."</li>"; ?>
-												</a></h4>
+											<h4><a href="#" class="invarseColor" id='stok<?php echo $i ?>'>
+												<?php echo $item['stok']; ?></a></h4>
 										</td>
 										<td class="quantity">
 											<div class="input-prepend input-append">
-												<?php echo form_input(array('name' => 'qty'.$i, 'value' => $item['qty'], 'maxlength' => '3', 'size' => '5')); ?>
-												<?php if ($this->cart->has_options($item['rowid']) == TRUE): ?>
-													<p>
-														<?php foreach ($this->cart->product_options($item['rowid']) as $option_name => $option_value): ?>
-															<strong><?php echo $option_name; ?>:</strong> <?php echo $option_value; ?><br />
-														<?php endforeach; ?>
-													</p>
-												<?php endif; ?>
+												<?php echo form_input(array('name' => 'qty', 'value' => $item['qty'], 'maxlength' => '4', 'size' => '5', 'id' => 'input-qty'.$i, 'class' => 'change-when-type')); ?>
 											</div>
 										</td>
 										<td class="sub-price">
 											<h3><?php echo $this->cart->format_number($item['price']); ?></h3>
 										</td>
 										<td class="total-price">
-											<h3>Rp. <?php echo $this->cart->format_number($item['subtotal']); ?></h3>
+											<h3 id="subtotal<?php echo $i ?>">Rp. <?php echo $this->cart->format_number($item['subtotal']); ?></h3>
+											<input type="hidden" id='hidden-subtotal<?php echo $i ?>' class='subtotal' value="<?php echo $item['subtotal']; ?>">
 										</td>
 										<td>
-											<?php 
-											$berat = $item['berat'] * $item['qty'];
-											echo  $berat;
-											?>
+											<h3 id="berat<?php echo $i ?>">
+												<?php 
+												$berat = $item['berat'] * $item['qty'];
+												echo  $berat;
+												?>
+											</h3>
 										</td>
 										<td>
 											<button class="btn btn-small" type="submit" data-title="Refresh" data-placement="top" data-toggle="tooltip"><i class="icon-refresh"></i></button>
@@ -95,14 +93,46 @@
 											<a href="<?php echo base_url(); ?>ecomerce/shoppingcart/delete/<?php echo $item['rowid'] ?>" class="btn btn-small" data-title="Remove"><i class="icon-trash"></i></a>
 										</td>
 										
-									</tr>
+									</tr>	
+					
+									<script>
+										$("#input-qty<?php echo $i ?>").keyup(function(event){
+											var stok = <?php echo $item['stok'] ?>;
+										    var qty = $("#input-qty<?php echo $i ?>").val();
+
+											// Fire off the request to /form.php
+											var sisa = (parseInt(stok) || 0) - (parseInt(qty) || 0);
+
+											if ((parseInt(sisa) || 0) < 0){
+												$("#stok<?php echo $i ?>").html(<?php echo $item['stok'] ?>);
+												event.preventDefault();
+												return false;
+											}
+
+											$("#stok<?php echo $i ?>").html(sisa);
+
+											if(sisa >= 0 && (parseInt(qty) || 0) >= 0){
+												$("#subtotal<?php echo $i ?>").text("Rp. " + <?php echo $item['price']; ?> * (parseInt(qty) || 0));
+												$("#hidden-subtotal<?php echo $i ?>").val(<?php echo $item['price']; ?> * (parseInt(qty) || 0));
+												$("#berat<?php echo $i ?>").text("Rp. " + <?php echo $item['berat']; ?> * (parseInt(qty) || 0));
+
+												if((parseInt(qty) || 0) > 0){
+												    request = $.ajax({
+												    	url: window.location.origin + "/Angon/ecomerce/shoppingcart/update",
+												    	type: "post",
+												    	data: "rowid=<?php echo $item['rowid'] ?>&qty=" + qty
+												     });
+												}
+											}
+										});
+									</script>
 									<?php $i++;?>
-									<?php $total_berat[$cart['id_penjual']] += $berat; ?>	
+									<?php $total_berat[$cart['id_penjual']] += $berat; ?>
 								<?php endforeach; ?>
 
 								<!-- <tr>
 									<td>Total Berat <?php echo $total_berat[$cart['id_penjual']]; ?></td>
-									<input type=hidden name='berat' value='<?php echo $total_berat; ?>'>
+									<input type=hidden name='berat' value='<?php //echo $total_berat; ?>'>
 								</tr> -->
 							</tbody>							
 						</table>
@@ -111,77 +141,35 @@
 					</form>
 				</div><!--end span12-->
 
-				<div class="span7">
-						<!--<div class="accordion-group">
-							<div class="accordion-heading">
-								<a class="accordion-toggle" data-toggle="collapse" data-parent="#cart-acc" href="#estimate">
-									<i class="icon-caret-right"></i>Estimasi Ongkos Pengiriman 
-								</a>
-							</div>
-							<div id="estimate" class="accordion-body collapse in">
-								<div class="accordion-inner">
-									<form action="<?php echo base_url().'ecomerce/shoppingcart/get_cost'; ?>" method="post" >
-										<?php $i = 0 ?>
-										<?php foreach ($cart_contents as $cart): ?>
-											<input type='hidden' name='kota_asal[<?php echo $i ?>]' value="<?php echo $cart['kota']; ?>" ></br>
-											<input type='hidden' name='berat[<?php echo $i ?>]' value='<?php echo $total_berat[$cart['id_penjual']]; ?>'>
-											<?php $i++ ?>
-										<?php endforeach; ?>
-										<div class="control-group">
-									    <div class="control-label">
-									    	<strong>Provinsi</strong>
-									    </div>
-									    <div class="controls">
-									      <select name="">
-									      	<option value="">-- Pilih Provinsi --</option>
-									      	<option value="">Country1</option>
-									      	<option value="">Country2</option>
-									      	<option value="">Country3</option>
-									      	<option value="">Country4</option>
-									      	<option value="">Country5</option>
-									      	<option value="">Country6</option>
-									      </select>
-									    </div>
-									  	</div>
-									  <div class="control-group">
-									    <div class="control-label">
-									    	<strong>Kota</strong>
-									    </div>
-									    <div class="controls">
-									       <select name="kota_tujuan">
-								      		<option value="">-- Pilih Kota --</option>
-											<?php
-												foreach ($daftar_kota as $k) {
-												 	echo "<option value='".$k->nama_kota."'>".$k->nama_kota."</option>";
-												 } 
-											?>
-								      </select>
-									    </div>
-									  </div>
-									  <div class="control-group">
-									    <div class="controls">
-									      <button type="submit" class="btn btn-primary">Hitung Ongkir</button>
-									    </div>
-									  </div>
-									</form>
-								</div>
-							</div>
-						</div>end accordion-group-->
-				</div>
-
+				<div class="span7"></div>
 				<div align="right" class="span5">
 					<div class="cart-receipt">
 						<table class="table table-receipt">
 							<tr>
 								<td class="alignRight"><h2>Total</h2></td>
-								<td class="alignLeft"><h2>Rp. <?php echo $this->cart->format_number($this->cart->total()); ?></h2></td>
+								<td class="alignLeft"><h2 id="total">Rp. <?php echo $this->cart->format_number($this->cart->total()); ?></h2></td>
 							</tr>
 							<tr>
 								<td class="alignRight"><a href="<?php echo base_url();?>ecomerce/kategori_grid"><button class="btn">Lanjutkan Belanja</button></a></td>
-								<td class="alignLeft"><a href="<?php echo base_url();?>ecomerce/checkout"><button class="btn btn-primary">Checkout</button></a>
+								<?php if($this->cart->contents() != null){
+								echo "<td class='alignLeft'><a href='".base_url()."ecomerce/checkout'><button class='btn btn-primary'>Checkout</button></a>";
+								} ?>
 								</td>
 							</tr>
 						</table>
+						<script type="text/javascript">
+							function setTotal(){
+								var total = 0;
+								$('.subtotal').each(function(e, val) {
+									total += parseInt(val.value);
+								});
+								$("#total").html("Rp. " + total);
+							}
+
+							$(".change-when-type").keyup(function(){
+								setTotal();
+							})
+						</script>
 					</div>
 				</div><!--end span5-->
 

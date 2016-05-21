@@ -12,11 +12,14 @@ public function __construct() {
     $this->load->model('transaksi_model');
     $this->load->model('user_model');
     $this->load->model('detail_transaksi_model');
+     $this->load->model('m_produk');
     
  }
  public function index(){
  	 $this->load->model('kota_model');
+ 	 $this->load->model('provinsi_model');
  	$data['daftar_kota'] = $this->kota_model->get_data_kota();
+ 	$data['daftar_provinsi'] = $this->provinsi_model->get_data_provinsi();
  	$data['data_pengirim'] = $this->user_model->data_pengirim();
  	
  	$this->load_page('ecomerce/checkout', $data);
@@ -34,6 +37,11 @@ public function check(){
 			$produk = $this->produk_model->find($items['id']); //ngefind produk sing idne iki
 			}
 		$this->cart->destroy();
+
+		$det_trans_produk = $this->m_produk->get_stok($this->last_id_detail_trans);
+		$det_trans = $this->detail_transaksi_model->get_jumlahbeli($this->last_id_detail_trans);
+		$hasil = $det_trans_produk->stok - $det_trans->jumlah;
+      	$this->m_produk->update_stok($det_trans_produk->id_produk,$hasil);
 
  		if($this->last_id_trans){	
 
@@ -61,10 +69,5 @@ public function check(){
  	$this->load_page('ecomerce/summary',$sum);
  	
  }
-
- 
-
-
-
 }
 ?>

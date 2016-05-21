@@ -116,12 +116,13 @@
 										<div class="control-group">
 										    <div class="control-label">Provinsi: <span class="text-error">*</span></div>
 										    <div class="controls">
-										      <select name="provinsi">
-										      	<option value="#">-- Pilih Provinsi --</option>
-										      	<option value="#">Jawa Timur</option>
-										      	<option value="#">Jawa Tengah</option>
-										      	<option value="#">Jawa Barat</option>
-										      	<option value="#">Jakarta</option>
+										      <select name="provinsi" id="select-provinsi">
+										      	<option value="pilih">-- Pilih Provinsi --</option>
+										      	<?php
+														foreach ($daftar_provinsi as $prov) {
+														 	echo "<option value='".$prov->id_provinsi."' >".$prov->nama_provinsi."</option>";
+														}
+													?>
 										      </select>
 										    </div>
 										</div>
@@ -240,17 +241,21 @@
 											
 									<br>
 									</div><!--end control-goup-->
+
+									<div id="cost">
+										<img src="<?php echo base_url()?>ecom/img/loading.gif" id="loading" style="display: none">
 										<div class="thumbTitle">Subtotal : Rp. <?php echo $this->cart->total() ?></div>
 										<div class="thumbTitle" id="total-ongkir"></div>
-										<div class="thumbTitle" id="total-bayar"></div>
+										<div class="thumbTitle" id="total-bayar" class="total-bayar"></div>
+									</div>
 								
-										<?php $i = 0 ?>
-										<?php foreach ($cart_contents as $cart): ?>
-											<!-- <input type='text' name='total_ongkir' id='input-total-ongkir'></br> -->
-											<input type='hidden' name='kota_asal[<?php echo $i ?>]' value="<?php echo $cart['kota']; ?>" ></br>
-											<input type='hidden' name='berat[<?php echo $i ?>]' value='<?php echo $total_berat[$cart['id_penjual']]; ?>'>
-											<?php $i++ ?>
-										<?php endforeach; ?>
+									<?php $i = 0 ?>
+									<?php foreach ($cart_contents as $cart): ?>
+										<!-- <input type='text' name='total_ongkir' id='input-total-ongkir'></br> -->
+										<input type='hidden' name='kota_asal[<?php echo $i ?>]' value="<?php echo $cart['kota']; ?>" ></br>
+										<input type='hidden' name='berat[<?php echo $i ?>]' value='<?php echo $total_berat[$cart['id_penjual']]; ?>'>
+										<?php $i++ ?>
+									<?php endforeach; ?>
 
 										
 									
@@ -302,51 +307,70 @@
     	$("#inputCompany").val("<?php echo $data_pengirim->nama_toko; ?>");
     	$("#inputFirstAdd").val("<?php echo $data_pengirim->alamat_user; ?>");
     	$("#inputTele").val("<?php echo $data_pengirim->no_telp; ?>");
+    	$("#select-provinsi").val("<?php echo $data_pengirim->id_provinsi; ?>");
     	$("#select-kota").val("<?php echo $data_pengirim->id_kota; ?>");
     	$("#inputPostCode").val("<?php echo $data_pengirim->kodepos; ?>");
+
+    	var selectKota = $("#select-kota").val();
+    	if(selectKota != "pilih"){
+    		getCost();
+    	}
+
     });
+
+    function getCost(){
+     	var value = $("#select-kota").val();
+
+     	var data = "";
+     	<?php $i = 0 ?>
+     	<?php foreach ($cart_contents as $cart): ?>
+			data += "kota_asal[<?php echo $i ?>]=<?php echo $cart['kota'] ?>&berat[<?php echo $i ?>]=<?php echo $total_berat[$cart['id_penjual']]; ?>";
+			<?php if ($i < count($cart_contents) - 1) { ?>
+				data += "&";
+			<?php } ?>
+			<?php $i++ ?>
+     	<?php endforeach; ?>
+
+     	request = $.ajax({
+          	url: "<?php echo base_url().'ecomerce/shoppingcart/get_cost'; ?>",
+          	type: "post",
+          	data: 'kota='+value+"&"+data
+     	});
+     	
+     	document.getElementById('loading').style.display = 'block';
+     	document.getElementById('total-ongkir').style.display = 'none';
+     	document.getElementById('total-bayar').style.display = 'none';
+
+    	request.done(function (response){
+		   	var harga = response.split('---');
+		   	var totalOngkir = 0;
+		   	for (var i = 1; i <= harga.length - 1; i++) {
+		   		$('#ongkir'+i).text("Ongkos Kirim : Rp. " + harga[i - 1]);
+		   		totalOngkir = parseInt(totalOngkir) + parseInt(harga[i - 1]);
+		   	}
+		   	document.getElementById('loading').style.display = 'none';
+		   	$('#total-ongkir').text("Total Ongkos Kirim : Rp. " + totalOngkir);
+		   	$('#total-bayar').text("Total Bayar : Rp. " + (parseInt("<?php echo $this->cart->total() ?>") + parseInt(totalOngkir)));
+		   	$('.total-bayar').val( (parseInt("<?php echo $this->cart->total() ?>") + parseInt(totalOngkir)));
+	     	document.getElementById('total-ongkir').style.display = 'block';
+	     	document.getElementById('total-bayar').style.display = 'block';
+		   	// $('#input-total-ongkir').val(totalOngkir);
+	    });
+    }
    
 	$("#radio_data_baru").click(function(){
     	$("#inputFirstName").val("");
     	$("#inputCompany").val("");
     	$("#inputFirstAdd").val("");
     	$("#inputTele").val("");
+    	$("#select-provinsi").val("pilih");
     	$("#select-kota").val("pilih");
     	$("#inputPostCode").val("");
     });
 
     $("#select-kota").change(function(event){
-     var value = $("#select-kota").val();
-
-     var data = "";
-     <?php $i = 0 ?>
-     <?php foreach ($cart_contents as $cart): ?>
-		data += "kota_asal[<?php echo $i ?>]=<?php echo $cart['kota'] ?>&berat[<?php echo $i ?>]=<?php echo $total_berat[$cart['id_penjual']]; ?>";
-		<?php if ($i < count($cart_contents) - 1) { ?>
-			data += "&";
-		<?php } ?>
-		<?php $i++ ?>
-     <?php endforeach; ?>
-
-     request = $.ajax({
-          url: "<?php echo base_url().'ecomerce/shoppingcart/get_cost'; ?>",
-          type: "post",
-          data: 'kota='+value+"&"+data
-     });
-
-    request.done(function (response){
-	   	var harga = response.split('---');
-	   	var totalOngkir = 0;
-	   	for (var i = 1; i <= harga.length - 1; i++) {
-	   		$('#ongkir'+i).text("Ongkos Kirim : Rp. " + harga[i - 1]);
-	   		totalOngkir = parseInt(totalOngkir) + parseInt(harga[i - 1]);
-	   	}
-	   	$('#total-ongkir').text("Total Ongkos Kirim : Rp. " + totalOngkir);
-	   	$('#total-bayar').text("Total Bayar : Rp. " + (parseInt("<?php echo $this->cart->total() ?>") + parseInt(totalOngkir)));
-	   	$('.total-bayar').val( (parseInt("<?php echo $this->cart->total() ?>") + parseInt(totalOngkir)));
-	   	// $('#input-total-ongkir').val(totalOngkir);
+     	getCost();
 	});
-});
 
     </script>
     
