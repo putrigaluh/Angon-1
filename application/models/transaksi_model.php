@@ -152,6 +152,7 @@ class Transaksi_Model extends CI_Model {
         $this->db->distinct();
         $this->db->from('transaksi');
         $this->db->where('id_user',$id_user);
+        $this->db->order_by('tgl_transaksi DESC');
         return $this->db->get()->result();
 
     }
@@ -184,7 +185,13 @@ class Transaksi_Model extends CI_Model {
         $this->db->where('id_det_transaksi', $id);
         $this->db->update('detail_transaksi', $data);
     }
-
+    function pesanan_pembeli(){ //untuk histori pemesanan
+        $id_user =  $this->session->userdata('id_user');
+        $this->db->where('transaksi.id_user', $id_user);
+        $this->db->order_by('transaksi.id_transaksi DESC');
+        return $this->db->get('transaksi')->result();
+        
+    }
 }
 
 ?>

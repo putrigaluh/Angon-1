@@ -80,7 +80,7 @@
 					</div>
 
 					<div class="pull-right">
-						<form method="get" action="<?php echo base_url();?>ecomerce/kategori_grid/pencarian" class="siteSearch">
+						<form method="get" action="<?php echo base_url();?>ecomerce/pencarian/cari_produk" class="siteSearch">
 							<div class="input-append">
 								<input type="text" name="cari" class="span2" id="appendedInputButton" placeholder="Search...">
 								<button class="btn btn-primary" type="submit" ><i class="icon-search"></i></button>
@@ -150,7 +150,7 @@
 				      		<?php 
 					        	foreach($kat as $row) { 
 								 	
-              						echo "<li value=''><a href='". base_url()."ecomerce/kategori_grid/cari_by_kategori/".$row->id_kategori_produk."'>".
+              						echo "<li value=''><a href='". base_url()."ecomerce/pencarian/cari_by_kategori/".$row->id_kategori_produk."'>".
               								$row->kategori_produk.
               								'</a></li>';
 					            }
@@ -160,7 +160,7 @@
 					     		
 					     		 foreach($dr as $rw) { 
 								 	
-              						echo "<li><a href='". base_url()."ecomerce/kategori_grid/cari_by_kategori/".$rw->id_kategori_produk."'>".
+              						echo "<li><a href='". base_url()."ecomerce/pencarian/cari_by_kategori/".$rw->id_kategori_produk."'>".
               								$rw->kategori_produk.
               								"</a></li>";
 					            }

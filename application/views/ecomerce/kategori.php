@@ -14,7 +14,7 @@
 							echo "<li><a class='invarseColor active' href='#'>Ternak</a>
 								<ul class='submenu'>";
 									 foreach($dr as $rw) { 
-										echo "<li><a class='invarseColor' href='". base_url()."ecomerce/produk/cari_by_kategori/".$rw->id_kategori_produk."'>".
+										echo "<li><a class='invarseColor' href='". base_url()."ecomerce/pencarian/cari_by_kategori/".$rw->id_kategori_produk."'>".
 										$rw->kategori_produk."</a></li>";
 									}
 							echo "</ul>
@@ -22,7 +22,7 @@
 							}
 							else if($this->session->userdata('kategori_user') =='Peternak'){
 							  foreach($kat as $row) { 
-              						echo "<li value=''><a class='invarseColor' href='". base_url()."ecomerce/produk/cari_by_kategori/".$row->id_kategori_produk."'>".
+              						echo "<li value=''><a class='invarseColor' href='". base_url()."ecomerce/pencarian/cari_by_kategori/".$row->id_kategori_produk."'>".
               								$row->kategori_produk.
               								'</a></li>';
 					            }
@@ -31,13 +31,13 @@
 					        	echo "<li><a class='invarseColor active' href='#'>Ternak</a>
 								<ul class='submenu'>";
 									 foreach($dr as $rw) { 
-										echo "<li><a class='invarseColor' href='". base_url()."ecomerce/produk/cari_by_kategori/".$rw->id_kategori_produk."'>".
+										echo "<li><a class='invarseColor' href='". base_url()."ecomerce/pencarian/cari_by_kategori/".$rw->id_kategori_produk."'>".
 										$rw->kategori_produk."</a></li>";
 									}
 								echo "</ul>
 								</li>";
 							 	foreach($kat as $row) {  	
-              						echo "<li value=''><a class='invarseColor' href='". base_url()."ecomerce/produk/cari_by_kategori/".$row->id_kategori_produk."'>".
+              						echo "<li value=''><a class='invarseColor' href='". base_url()."ecomerce/pencarian/cari_by_kategori/".$row->id_kategori_produk."'>".
               								$row->kategori_produk.
               								'</a></li>';
 					            }

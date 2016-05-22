@@ -150,7 +150,7 @@
 								<td class="alignLeft"><h2 id="total">Rp. <?php echo $this->cart->format_number($this->cart->total()); ?></h2></td>
 							</tr>
 							<tr>
-								<td class="alignRight"><a href="<?php echo base_url();?>ecomerce/kategori_grid"><button class="btn">Lanjutkan Belanja</button></a></td>
+								<td class="alignRight"><a href="<?php echo base_url();?>ecomerce/produk"><button class="btn">Lanjutkan Belanja</button></a></td>
 								<?php if($this->cart->contents() != null){
 								echo "<td class='alignLeft'><a href='".base_url()."ecomerce/checkout'><button class='btn btn-primary'>Checkout</button></a>";
 								} ?>

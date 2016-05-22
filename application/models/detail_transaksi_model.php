@@ -112,18 +112,17 @@ class Detail_Transaksi_Model extends CI_Model {
         return $query->result();
     }
 
-    function pesanan_pembeli(){ //untuk histori pemesanan
 
+    function detail_pembelian($id_transaksi){
         $id_user =  $this->session->userdata('id_user');
 
-        $this->db->select('*');
         $this->db->from('detail_transaksi');
         $this->db->join('transaksi', 'detail_transaksi.id_transaksi = transaksi.id_transaksi');
         $this->db->join('produk', 'detail_transaksi.id_produk = produk.id_produk');
         $this->db->join('user', 'produk.id_user = user.id_user');
         $this->db->where('transaksi.id_user', $id_user);
-        $this->db->order_by('transaksi.id_transaksi DESC');
-
+        $this->db->where('detail_transaksi.id_transaksi', $id_transaksi);
+        
         $query = $this->db->get();
         return $query->result();
     }
