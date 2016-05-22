@@ -103,7 +103,7 @@
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi/"><i class="icon-caret-right"></i> Status Pemesanan</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi_pembayaran"><i class="icon-caret-right"></i> Konfirmasi Pembayaran</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi/konfirmasi_penerimaan"><i class="icon-caret-right"></i> Konfirmasi Penerimaan</a></li>
-						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi/histori_pemesanan"><i class="icon-caret-right"></i> Histori Pemesanan</a></li>
+						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/histori_pemesanan"><i class="icon-caret-right"></i> Histori Pemesanan</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>manage/return_dana"><i class="icon-caret-right"></i> Pengembalian Dana</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>admin/keluhan/lihat_keluhan"><i class="icon-caret-right"></i> Histori Keluhan</a></li>
 					</ul>

@@ -128,7 +128,7 @@
 										</div>
 
 										<div class="control-group">
-										    <label class="control-label" for="inputCity">Kota: <span class="text-error">*</span></label>
+										    <label class="control-label" for="inputCity">Kota: </label>
 										    <div class="controls">
 										      <select name="kota" id="select-kota" required>
 										      	<option value="pilih" selected disabled>-- Pilih Kota --</option>
@@ -141,7 +141,7 @@
 										    </div>
 										</div>
 										<div class="control-group">
-										    <label class="control-label" for="inputPostCode">Kodepos: <span class="text-error">*</span></label>
+										    <label class="control-label" for="inputPostCode">Kodepos: </label>
 										    <div class="controls">
 										      <input type="text" id="inputPostCode" name="kodepos" placeholder="Masukkan kodepos penerima.." required>
 										      <input type="hidden" class="total-bayar" name="total_bayar" >

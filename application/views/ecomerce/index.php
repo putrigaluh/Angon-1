@@ -40,7 +40,7 @@
 										<button class="btn btn-mini vNext"><i class="icon-caret-down"></i></button>
 										<button class="btn btn-mini vPrev"><i class="icon-caret-up"></i></button>
 									</div>
-									<button class="btn btn-mini">View All</button>
+									
 								</div>
 							</div>
 						</div><!--end titleHeader-->
@@ -110,7 +110,7 @@
 							<h3>Produk Ternak</h3>
 							<div class="pagers">
 								<div class="btn-toolbar">
-									<a href="<?php echo base_url() ?>ecomerce/kategori_grid"><button class="btn btn-mini">Lihat Semua</button></a>
+									<a href="<?php echo base_url() ?>ecomerce/pencarian"><button class="btn btn-mini">Lihat Semua</button></a>
 
 								</div>
 							</div>

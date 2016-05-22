@@ -35,13 +35,15 @@ public function check(){
  		foreach($this->cart->contents() as $items){
 			$this->last_id_detail_trans = $this->detail_transaksi_model->simpan_pesanan($this->last_id_trans, $items);
 			$produk = $this->produk_model->find($items['id']); //ngefind produk sing idne iki
+
+			$det_trans_produk = $this->m_produk->get_stok($this->last_id_detail_trans);
+			$det_trans = $this->detail_transaksi_model->get_jumlahbeli($this->last_id_detail_trans);
+			$hasil = $det_trans_produk->stok - $det_trans->jumlah;
+      		$this->m_produk->update_stok($det_trans_produk->id_produk,$hasil);
 			}
 		$this->cart->destroy();
 
-		$det_trans_produk = $this->m_produk->get_stok($this->last_id_detail_trans);
-		$det_trans = $this->detail_transaksi_model->get_jumlahbeli($this->last_id_detail_trans);
-		$hasil = $det_trans_produk->stok - $det_trans->jumlah;
-      	$this->m_produk->update_stok($det_trans_produk->id_produk,$hasil);
+
 
  		if($this->last_id_trans){	
 

@@ -87,7 +87,7 @@
 													</div>
 													<div class='control-group' align='center'>
 												    <div class='controls'>
-													    <input type='submit' name='submit' class='btn btn-primary' value='Bayar'>
+													    <input type='submit' name='submit' id='btn-bayar' class='btn btn-primary' value='Bayar'>
 												    </div>
 													</div>"; 
 										
@@ -112,7 +112,7 @@
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi"><i class="icon-caret-right"></i> Status Pemesanan</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi_pembayaran"><i class="icon-caret-right"></i> Konfirmasi Pembayaran</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi/konfirmasi_penerimaan"><i class="icon-caret-right"></i> Konfirmasi Penerimaan</a></li>
-						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi/histori_pemesanan"><i class="icon-caret-right"></i> Histori Pemesanan</a></li>
+						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/histori_pemesanan"><i class="icon-caret-right"></i> Histori Pemesanan</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>manage/return_dana"><i class="icon-caret-right"></i> Pengembalian Dana</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/keluhan/lihat_keluhan"><i class="icon-caret-right"></i> Histori Keluhan</a></li>
 					</ul>
@@ -193,6 +193,9 @@
 		    } else {
 		    	$('.tambah').css({'display': 'none'});
 		    }
+		});
+		$('#btn-bayar').click(function(){
+				alert('Terimakasih.. Konfimrasi Anda akan diverifikasi Admin Angon');
 		});
 	});
 </script>

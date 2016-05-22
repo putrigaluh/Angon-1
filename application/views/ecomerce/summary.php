@@ -24,18 +24,18 @@
 								<div class="accordion-inner">
 									
 									  <div class="control-group">
-									    Menunggu Pembayaran<br>
+									    <font size="5">Menunggu Pembayaran<br></font>
 
-									    Nomor Pesanan : <?php echo $sum->id_transaksi; ?><br>
+									    Nomor Pesanan : <font size="5"><?php echo $sum->id_transaksi; ?></font><br>
 									   	Status : <?php if($sum->status == "Pending"){ echo "Menunggu Pembayaran"; }?><br>
-									   	Pembayaran Anda telah dikonfirmasi Angon. Sistem kami sedang menunggu konfirmasi pembayaran.<br><br>
+									   	Pemesanan Anda telah dikonfirmasi Angon. Sistem kami sedang menunggu konfirmasi pembayaran.<br><br>
 
 									   	Pilih tombol <b>Histori Pemesanan</b> untuk melihat nomor pemesanan anda. <br>
 									   	Pilih <b>Konfirmasi pembayaran</b> untuk mengkonfirmasikan jika Anda telah melakukan pembayaran.
 									  </div><!--end control-group-->
 									  <div class="control-group">
 									 <div class="controls">
-									      <a href="<?php echo base_url()?>ecomerce/konfirmasi/histori_pemesanan"><button class="btn btn-primary">Histori Pemesanan</button></a>
+									      <a href="<?php echo base_url()?>ecomerce/histori_pemesanan"><button class="btn btn-primary">Histori Pemesanan</button></a>
 									      <a href="<?php echo base_url()?>ecomerce/konfirmasi_pembayaran/konfirmasi_pembayaran"><button class="btn btn-primary">Konfirmasi Pembayaran</button></a>
 									    </div>
 							 		</div><!--end control-group-->

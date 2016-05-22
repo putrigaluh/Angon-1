@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class kategori_grid extends MY_controller{
+class pencarian extends MY_controller{
 
 public function __construct() {
     parent::__construct();
@@ -17,7 +17,7 @@ public function __construct() {
 	$this->load->library('pagination');
 
  	$config = array();
-	$config["base_url"] 		= base_url().'ecomerce/kategori_grid/cari_by_kategori/'. $kat;
+	$config["base_url"] 		= base_url().'ecomerce/pencarian/cari_by_kategori/'. $kat;
 	$total_row 					= $this->kategori_model->record_count($kat);
 	$config["total_rows"] 		= $total_row;
 	$config["per_page"] 		= 9;
@@ -85,7 +85,7 @@ public function __construct() {
 	// $this->load_page_produk('ecomerce/kategori_grid', $data);
  }
 
- function pencarian(){
+ function cari_produk(){
 
  	$data['cari_produk']= $this->produk_model->pencarian();
  	if($data['cari_produk'] == null){
