@@ -156,6 +156,18 @@ class Transaksi_Model extends CI_Model {
         return $this->db->get()->result();
 
     }
+    function get_id_transaksi_terkirim(){
+
+        $id_user =  $this->session->userdata('id_user');
+        $this->db->distinct();
+        $this->db->from('transaksi');
+        $this->db->where('id_user',$id_user);
+        $this->db->where('status','Proses');
+        $this->db->order_by('tgl_transaksi DESC');
+        return $this->db->get()->result();
+
+    }
+    
     function get_id_transaksi_pending(){
         $id_user =  $this->session->userdata('id_user');
         $this->db->from('transaksi');

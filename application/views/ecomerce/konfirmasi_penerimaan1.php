@@ -31,43 +31,16 @@
 										echo"<div class='control-group'>
 									    <label class='control-label' for='inputFirstName'>No Order Produk: <span class='text-error'>*</span></label>
 									    <div class='controls'>
-									      <select class='form-control' name='id_trans' id='select_transaksi'>
+									      <select class='form-control' name='id_detail_trans'>
 												<option value=''>Pilih No Order Produk</option> ";
 												
-													foreach ($transaksi as $dt) {
-													 	echo "<option value='".$dt->id_transaksi."'>".$dt->id_transaksi."</option>";
+													foreach ($id_detail_transaksi as $dt) {
+													 	echo "<option value='".$dt->id_det_transaksi."'>".$dt->id_det_transaksi." - ".$dt->nama_produk." dari toko ".$dt->nama_toko."</option>";
 													 
 													}
 											echo "</select>"; ?> 
-
 									    </div>
 										</div>
-
-										<div class="control-group success" id="select_produk_group" style="display: none">
-							    <label class="control-label" for="inputFirstName">Barang: <span class="text-error">*</span></label>
-							    <div class="controls">
-							    <select class="form-control" name="id_detail_transaksi" id="select_produk">
-							    	<option disabled selected>Pilih</option>
-							    </select>
-							      <!-- <input type="text" name="id_transaksi" placeholder="1110009090"> -->
-							    </div>
-								</div><!--end control-group-->
-
-										<script>
-
-								$("#select_transaksi").change(function(event){
-									var val = $("#select_transaksi").val();
-									request = $.ajax({
-								        url: window.location.origin + "/Angon/ecomerce/konfirmasi/dropdown_produk",
-								        type: "post",
-								        data: 'id_detail_trans='+val
-								    });
-								    request.done(function (response){
-								    	$('#select_produk_group').show();
-							        	$("#select_produk").html(response);
-							        });
-								});
-								</script>
 										<div class='control-group' align='center'>
 							    		<div class='controls'>
 								    		<input type='submit' class='btn btn-primary' name='submit' value='Diterima'>
@@ -94,7 +67,7 @@
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi"><i class="icon-caret-right"></i> Status Pemesanan</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi_pembayaran"><i class="icon-caret-right"></i> Konfirmasi Pembayaran</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi_penerimaan"><i class="icon-caret-right"></i> Konfirmasi Penerimaan</a></li>
-						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/konfirmasi/histori_pemesanan"><i class="icon-caret-right"></i> Histori Pemesanan</a></li>
+						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/histori_pemesanan"><i class="icon-caret-right"></i> Histori Pemesanan</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>manage/return_dana"><i class="icon-caret-right"></i> Pengembalian Dana</a></li>
 						<li><a class="invarseColor" href="<?php echo base_url();?>ecomerce/keluhan/lihat_keluhan"><i class="icon-caret-right"></i> Histori Keluhan</a></li>
 					</ul>

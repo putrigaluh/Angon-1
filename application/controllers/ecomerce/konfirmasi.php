@@ -29,18 +29,48 @@ public function __construct() {
  public function konfirmasi_penerimaan(){
 	   
      if($this->input->post('submit')){
-      $id_det_transaksi=$this->input->post("id_detail_trans");
+      $id_det_transaksi = $this->input->post("id_detail_transaksi");
+
       $this->detail_transaksi_model->update_status_penerimaan($id_det_transaksi);
+
+      $data_detail = $this->detail_transaksi_model->get_detail_beli();
+
+      $jumlah_diterima = 0;
+      
+
+      foreach($data_detail as $dt){
+      
+        if($dt->status_kirim == "Diterima"){
+          $jumlah_diterima++;
+        }
+      }
+
+      $data_detail_1 = $this->detail_transaksi_model->get_detail_beli($id_det_transaksi);
+
+      if  ($jumlah_diterima == count($data_detail)) { // lek wes diterima kwabweh 
+        $this->transaksi_model->update_status($data_detail_1->id_transaksi,'Selesai');
+      }
+
+
       $this->detail_transaksi_model->tambah_saldo($id);
       $this->session->set_flashdata('message', 'Terimakasih telah membeli di Angon');
       redirect('ecomerce/konfirmasi/konfirmasi_penerimaan');
     }else{
-      $data['id_detail_transaksi'] = $this->detail_transaksi_model->get_id_detail_trans();
+      $data['transaksi'] = $this->transaksi_model->get_id_transaksi_terkirim();
 
       $this->load_page('ecomerce/konfirmasi_penerimaan', $data);
       
     }
  }
+
+ function dropdown_produk(){
+    $id_transaksi = $this->input->post("id_detail_trans");
+    $produk = $this->detail_transaksi_model->dropdown_produk($id_transaksi);
+      echo '<option selected disabled>Pilih</option>';
+    foreach ($produk as $p) {
+      echo '<option value="'.$p->id_det_transaksi.'">'.$p->nama_produk.'</option>';
+    }
+  }
 
  function update_status_penerimaan_by_id($id_detail){
     $this->detail_transaksi_model->update_status_penerimaan($id_detail);

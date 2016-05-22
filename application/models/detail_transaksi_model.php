@@ -27,7 +27,7 @@ class Detail_Transaksi_Model extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
-
+    
     public function pesanan(){
           
           $id_user =  $this->session->userdata('id_user');
@@ -55,8 +55,26 @@ class Detail_Transaksi_Model extends CI_Model {
         );
         $this->db->where('id_det_transaksi', $id);
         $this->db->update('detail_transaksi', $data);
-    }
-    
+     }
+    // public function dropdown_produk($id_transaksi){
+    //     $id_user = $this->session->userdata('id_user');
+    //     $this->db->join('detail_transaksi', 'produk.id_produk = detail_transaksi.id_produk');
+    //     $this->db->join('transaksi', 'detail_transaksi.id_transaksi = transaksi.id_transaksi');
+    //     $this->db->where('transaksi.id_user', $id_user);
+    //     $this->db->where('transaksi.id_transaksi',$id_transaksi);
+    //     $query = $this->db->get('produk');
+    //     return $query->result();
+    // }
+     public function dropdown_produk($id_transaksi){
+            $id_user = $this->session->userdata('id_user');
+            $this->db->join('transaksi', 'dt.id_transaksi = transaksi.id_transaksi');
+            $this->db->join('produk', 'dt.id_produk = produk.id_produk');
+            $this->db->where('transaksi.id_user',$id_user);
+            $this->db->where('dt.id_transaksi', $id_transaksi);
+            $this->db->where('status_kirim','Terkirim');
+            $query = $this->db->get('detail_transaksi dt');
+            return $query->result();
+     }
     function update_status_penerimaan($id_det_transaksi) {
         $data = array (
             'status_kirim' => "Diterima",
